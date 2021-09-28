@@ -1,0 +1,4 @@
+*.tgz
+SHA256SUMS
+/target
+.idea

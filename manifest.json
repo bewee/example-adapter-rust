@@ -1,0 +1,25 @@
+{
+  "manifest_version": 1,
+  "id": "example-adapter-rust",
+  "name": "Example Adapter Rust",
+  "short_name": "Example",
+  "version": "0.1.15",
+  "description": "A simple Rust adapter example",
+  "homepage_url": "https://github.com/bewee/example-adapter-rust#readme",
+  "license": "MPL-2.0",
+  "author": "bewee",
+  "gateway_specific_settings": {
+    "webthings": {
+      "exec": "{path}/example-adapter-rust {path}",
+      "strict_min_version": "1.0.0",
+      "strict_max_version": "*",
+      "primary_type": "adapter"
+    }
+  },
+  "options": {
+    "schema": {
+      "type": "object",
+      "properties": {}
+    }
+  }
+}
