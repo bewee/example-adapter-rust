@@ -5,7 +5,14 @@
  */
 use crate::device::ExampleDevice;
 use async_trait::async_trait;
-use gateway_addon_rust::adapter::{Adapter, Built};
+use chrono;
+use gateway_addon_rust::{
+    adapter::{Adapter, Built},
+    device::BuiltDevice,
+};
+use serde_json::Value;
+use std::time::Duration;
+use tokio::time::sleep;
 
 pub struct ExampleAdapter {}
 
@@ -20,8 +27,24 @@ impl Adapter for ExampleAdapter {
     async fn init(self: &mut Built<Self>) -> Result<(), String> {
         log::debug!("Creating device");
 
-        if let Err(err) = self.add_device(ExampleDevice {}).await {
-            log::error!("Could not create device: {}", err)
+        match self.add_device(ExampleDevice {}).await {
+            Err(err) => log::error!("Could not create device: {}", err),
+            Ok(device) => {
+                tokio::spawn(async move {
+                    loop {
+                        log::info!("Updating time");
+                        let device = device.lock().await;
+                        let property = device.get_property("clock");
+                        let property = property.unwrap();
+                        let mut property = property.lock().await;
+                        property
+                            .set_value(Value::String(format!("{:?}", chrono::offset::Local::now())))
+                            .await
+                            .unwrap();
+                        sleep(Duration::from_millis(1000)).await;
+                    }
+                });
+            }
         }
 
         Ok(())

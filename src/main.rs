@@ -12,6 +12,7 @@ use log::LevelFilter;
 use simple_logger::SimpleLogger;
 
 mod adapter;
+mod clock_property;
 mod config;
 mod device;
 mod timer_property;

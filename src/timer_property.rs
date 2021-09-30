@@ -9,7 +9,7 @@ use serde_json::value::Value;
 
 pub struct TimerProperty {}
 
-#[async_trait(?Send)]
+#[async_trait]
 impl Property for TimerProperty {
     async fn init(self: &mut Init<Self>) -> Result<(), String> {
         self.description_mut().name = Some("timer".to_owned());
